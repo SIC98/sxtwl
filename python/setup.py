@@ -24,9 +24,12 @@ except Exception as e:
 src_dir = Path(__file__).parent / "src"
 parent_src_dir = Path(__file__).parent.parent / "src"
 
-if parent_src_dir.is_dir():
-    if src_dir.is_dir():
-        shutil.rmtree(src_dir)
+# Check if we need to copy source files (for development builds)
+if parent_src_dir.is_dir() and not src_dir.is_dir():
+    shutil.copytree(parent_src_dir, src_dir)
+elif parent_src_dir.is_dir() and src_dir.is_dir():
+    # Update if parent exists (development mode)
+    shutil.rmtree(src_dir)
     shutil.copytree(parent_src_dir, src_dir)
 
 # Compiler flags
@@ -61,7 +64,7 @@ sxtwl_module = setuptools.Extension(
 
 setuptools.setup(
     name="sxtwl-modern",
-    version="1.1.0",
+    version="1.1.1",
     author="yuangu",
     author_email="lifulinghan@aol.com",
     description="Sxtwl_cpp wrapper for Python - Chinese Lunar Calendar Library",
@@ -69,7 +72,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     license="BSD",
     url="https://github.com/SIC98/sxtwl",
-    packages=setuptools.find_packages(),
     ext_modules=[sxtwl_module],
     py_modules=["sxtwl"],
     python_requires='>=3.8',
