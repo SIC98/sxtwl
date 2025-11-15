@@ -20,17 +20,22 @@ except Exception as e:
       
 
 
-# Copy source files if needed
+# Ensure source files exist
 src_dir = Path(__file__).parent / "src"
-parent_src_dir = Path(__file__).parent.parent / "src"
 
-# Check if we need to copy source files (for development builds)
-if parent_src_dir.is_dir() and not src_dir.is_dir():
-    shutil.copytree(parent_src_dir, src_dir)
-elif parent_src_dir.is_dir() and src_dir.is_dir():
-    # Update if parent exists (development mode)
-    shutil.rmtree(src_dir)
-    shutil.copytree(parent_src_dir, src_dir)
+# For source distributions, src should already be included via MANIFEST.in
+if not src_dir.is_dir():
+    # Try to copy from parent directory (for development builds)
+    parent_src_dir = Path(__file__).parent.parent / "src"
+    if parent_src_dir.is_dir():
+        print(f"Copying source files from {parent_src_dir} to {src_dir}")
+        shutil.copytree(parent_src_dir, src_dir)
+    else:
+        raise RuntimeError(
+            "Source directory 'src' not found. "
+            "This package requires C++ source files to build. "
+            "Please ensure the source distribution includes the src/ directory."
+        )
 
 # Compiler flags
 extra_compile_args = []
@@ -64,7 +69,7 @@ sxtwl_module = setuptools.Extension(
 
 setuptools.setup(
     name="sxtwl-modern",
-    version="1.1.1",
+    version="1.1.2",
     author="yuangu",
     author_email="lifulinghan@aol.com",
     description="Sxtwl_cpp wrapper for Python - Chinese Lunar Calendar Library",
