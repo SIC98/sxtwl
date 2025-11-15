@@ -1,0 +1,23 @@
+# Include README and license files
+include README.md
+include LICENSE
+
+# Include C++ source files
+recursive-include src *.cpp *.h *.hpp
+
+# Include SWIG wrapper
+include python/sxtwl_wrap.cxx
+include python/sxtwl.py
+
+# Include build configuration
+include pyproject.toml
+include python/setup.py
+
+# Exclude build artifacts and cache
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude __pycache__
+global-exclude *.so
+global-exclude *.dylib
+global-exclude *.dll
+global-exclude .DS_Store
