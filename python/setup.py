@@ -60,7 +60,7 @@ sxtwl_module = setuptools.Extension(
 
 
 setuptools.setup(
-    name="sxtwl",
+    name="sxtwl-modern",
     version="1.1.0",
     author="yuangu",
     author_email="lifulinghan@aol.com",
